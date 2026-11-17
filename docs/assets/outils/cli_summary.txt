@@ -1,0 +1,10 @@
+$ python -m vtb.toolkit summary data/raw/magnetic_tile --ext .jpg
+| folder           |   images |   unreadable | sizes (HxW)                                        |   channels | dtypes   | extensions   |   mean_kb |
+|------------------|----------|--------------|----------------------------------------------------|------------|----------|--------------|-----------|
+| MT_Blowhole/Imgs |      115 |            0 | 373x248 (2), 272x221 (2), 375x265 (2), +107 autres |          1 | uint8    | .jpg         |      29.2 |
+| MT_Break/Imgs    |       85 |            0 | 247x592 (1), 320x189 (1), 268x189 (1), +82 autres  |          1 | uint8    | .jpg         |      36.7 |
+| MT_Crack/Imgs    |       57 |            0 | 260x596 (3), 244x599 (3), 242x594 (3), +46 autres  |          1 | uint8    | .jpg         |      42.7 |
+| MT_Fray/Imgs     |       32 |            0 | 354x488 (1), 240x602 (1), 233x568 (1), +29 autres  |          1 | uint8    | .jpg         |      43.7 |
+| MT_Free/Imgs     |      952 |            0 | 286x123 (5), 375x265 (4), 273x218 (3), +872 autres |          1 | uint8    | .jpg         |      37.1 |
+| MT_Uneven/Imgs   |      103 |            0 | 289x121 (1), 261x593 (1), 238x594 (1), +100 autres |          1 | uint8    | .jpg         |      39.1 |
+| TOTAL            |     1344 |            0 |                                                    |            | uint8    | .jpg         |      36.9 |

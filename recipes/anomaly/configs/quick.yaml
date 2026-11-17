@@ -1,0 +1,24 @@
+# Verification rapide de la chaine (une minute) : PaDiM a 128 px sur MVTec bottle.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/mvtec_bottle       # tools/get_data/get_mvtec_bottle.py (MVTec AD, CC BY-NC-SA 4.0)
+  layout: mvtec                     # train/good, test/<type>, ground_truth/<type>/<nom>_mask.png
+# --- Etape 3 : cataloguer (etiquettes considerees normales) ---
+normal_labels: [good]
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/anomaly/bottle_split.csv   # le meme decoupage pour toutes les methodes : elles restent comparables
+  val_fraction: 0.15                # normales du train gardees pour calibrer le seuil
+# --- Etape 5 : pretraiter ---
+preprocess:
+  - {name: resize, size: 128}        # petite taille : verification, pas precision
+# --- Etape 11 : evaluer (carte lissee, score image, seuils sur les normales de validation) ---
+scoring: {gaussian_sigma: 4.0, image_score: max, image_quantile: 0.99}
+# --- Etapes 7 a 10 : choix de la methode ---
+method: anomalib
+# --- Etapes 7 a 10 : lots, modele, perte et optimiseur, entrainement (methode anomalib) ---
+anomalib:
+  model: Padim
+  params: {backbone: resnet18, layers: [layer1, layer2, layer3]}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/anomaly/quick, num_workers: 0}

@@ -1,0 +1,19 @@
+2026-11-05 18:39:20,587 | INFO | run | sortie outputs/detection/quick_yolox | device cpu
+2026-11-05 18:39:21,061 | INFO | poids YOLOX-tiny charges depuis weights/yolox_tiny.pth (tete de classification reinitialisee)
+2026-11-05 18:43:25,956 | INFO | epoque  1 | perte 10.365 | val mAP50 0.029 mAP50-95 0.010 | 245s | meilleur
+2026-11-05 18:47:10,835 | INFO | epoque  2 | perte 8.270 | val mAP50 0.094 mAP50-95 0.035 | 225s | meilleur
+2026-11-05 18:47:10,844 | INFO | entrainement yolox : 470.2 s
+2026-11-05 18:47:12,257 | INFO | entrainement yolox termine en 470 s -> outputs/detection/quick_yolox/best.pt
+2026-11-05 18:47:29,040 | INFO | prediction du test : 16.5 s
+2026-11-05 18:47:30,404 | INFO | test (36 images) : mAP50 0.137 | mAP50-95 0.076 | au seuil 0.25 : precision 0.438 rappel 0.083
+2026-11-05 18:47:43,071 | INFO | ONNX ecrit : outputs/detection/quick_yolox/model.onnx (20.8 Mo)
+2026-11-05 18:47:46,191 | INFO | verification ONNX OK : {'output_0_max_abs_diff': '1.00e-05', 'output_0_scale': '3.69e+00', 'batch_size': 4}
+2026-11-05 18:47:46,599 | INFO | verification ONNX YOLOX : {'raw': {'output_0_max_abs_diff': 1.0013580322265625e-05, 'output_0_scale': 3.6859588623046875, 'batch_size': 4}, 'boxes': 0, 'reference_boxes': 0, 'mean_iou': None}
+2026-11-05 18:47:48,665 | INFO | OpenVINO ecrit : outputs/detection/quick_yolox/model.xml
+2026-11-05 18:47:53,889 | INFO | latence : {'torch_cpu_ms': 238.17, 'batch': 1, 'onnxruntime_cpu_ms': 71.65, 'openvino_cpu_ms': 43.18}
+2026-11-05 18:59:44,871 | INFO | run | sortie outputs/detection/quick_yolox | device cpu
+2026-11-05 18:59:55,803 | INFO | ONNX ecrit : outputs/detection/quick_yolox/model.onnx (20.8 Mo)
+2026-11-05 19:00:01,012 | INFO | verification ONNX OK : {'output_0_max_abs_diff': '1.00e-05', 'output_0_scale': '3.69e+00', 'batch_size': 4}
+2026-11-05 19:00:01,343 | INFO | verification ONNX YOLOX : {'raw': {'output_0_max_abs_diff': 1.0013580322265625e-05, 'output_0_scale': 3.6859588623046875, 'batch_size': 4}, 'boxes': 5, 'reference_boxes': 5, 'mean_iou': 0.9999988794326782}
+2026-11-05 19:00:02,034 | INFO | OpenVINO ecrit : outputs/detection/quick_yolox/model.xml
+2026-11-05 19:00:32,861 | INFO | latence : {'torch_cpu_ms': 4242.4, 'batch': 1, 'onnxruntime_cpu_ms': 54.56, 'openvino_cpu_ms': 17.59}

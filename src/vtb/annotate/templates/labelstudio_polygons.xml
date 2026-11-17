@@ -1,0 +1,11 @@
+<View>
+  <Image name="image" value="$image" zoom="true"/>
+  <PolygonLabels name="label" toName="image">
+    <Label value="crazing"/>
+    <Label value="inclusion"/>
+    <Label value="patches"/>
+    <Label value="pitted_surface"/>
+    <Label value="rolled-in_scale"/>
+    <Label value="scratches"/>
+  </PolygonLabels>
+</View>

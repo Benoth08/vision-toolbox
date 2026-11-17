@@ -1,0 +1,39 @@
+# Base de comparaison sans apprentissage sur Magnetic Tile Defect (tuiles grises, defauts surtout sombres).
+# Valide par vtb.classical.baseline.ClassicalConfig. Seuil et aire choisis sur val, test lu une fois.
+# Resultat attendu : mediocre. Sur une surface texturee, la texture repond autant que les defauts ;
+# c'est la limite de la vision classique, et le chiffre qu'un U-Net doit battre (recette segmentation).
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/magnetic_tile         # MT_<classe>/Imgs/x.jpg + x.png (masque a cote)
+  layout: image_mask
+  extensions: [".jpg"]                 # les .png du meme dossier sont les masques
+  color: gray
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/classical/magnetic_tile/split.csv
+  strategy: stratified
+  val_fraction: 0.2
+  test_fraction: 0.3
+# --- Reglages generaux (etape 1) ---
+runtime:
+  output_dir: outputs/classical/magnetic_tile
+  seed: 42
+# --- A la place des etapes 8 a 10 : pas de modele appris, une methode classique ---
+method: response
+# --- Etapes 2 et 3 : importer et cataloguer (sous-echantillon par classe) ---
+max_per_class: 60
+# --- Etape 5 : pretraiter (ici : la carte de reponse, ou la mise a l'echelle commune) ---
+preprocess:                            # carte de reponse : les defauts sombres deviennent clairs
+  - {name: median_blur, ksize: 7}      # efface le grain de la texture avant de chercher les defauts
+  - {name: shading_division, sigma: 30, downscale: 2}
+  - {name: blackhat, kernel: 21}
+# --- Etape 11 : evaluer (seuils essayes sur la validation) ---
+thresholds: [0.04, 0.06, 0.08, 0.1, 0.12, 0.16, 0.2]   # fractions de la dynamique (0.08 = 20 niveaux sur 255)
+# --- Etape 11 : evaluer (aires minimales essayees sur la validation) ---
+min_areas: [50, 150, 400]
+# --- A la place des etapes 8 a 10 : sens de la carte (defauts clairs ou sombres) ---
+invert: false                          # apres le black-hat, les defauts sont clairs
+# --- Etape 11 : evaluer (critere de choix sur la validation) ---
+select: dice
+# --- Hors fil : dossier des figures de la documentation ---
+assets_dir: docs/assets/classical

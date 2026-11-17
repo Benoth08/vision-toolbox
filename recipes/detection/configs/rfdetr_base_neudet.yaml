@@ -1,0 +1,30 @@
+# RF-DETR base sur NEU-DET : plus precis que nano, environ 3 fois plus lent ; GPU indispensable.
+# GPU conseille. Meme decoupage et meme evaluateur que les YOLO et Faster R-CNN : comparaison directe.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_det/IMAGES
+  layout: annotations
+  annotations_dir: data/raw/neu_det/ANNOTATIONS
+  annotation_format: voc
+  color: gray
+# --- Etape 4 : decouper ---
+split: {file: outputs/detection/neu_det_split.csv, strategy: stratified, val_fraction: 0.15, test_fraction: 0.15}
+# --- Etapes 6 a 10 : choix du moteur de detection ---
+backend: rfdetr
+# --- Etapes 6 a 10 : augmentation, lots, modele, perte et optimiseur, entrainement (moteur rfdetr) ---
+rfdetr:
+  size: base                           # nano | small | medium | base | large (large : licence a verifier)
+  weights: weights/rf-detr-base.pth    # poids COCO, telecharges par rfdetr s'ils manquent
+  resolution: 448                      # NEU-DET fait 200 px : inutile de monter plus haut
+  epochs: 50
+  batch_size: 4
+  grad_accum_steps: 4                  # lot effectif 16
+  lr: 1.0e-4
+  lr_encoder: 1.5e-4
+  patience: 10
+# --- Etapes 11 et 13 : evaluer et predire (seuils de confiance et de NMS) ---
+evaluation: {conf_eval: 0.001, conf_predict: 0.4, iou_nms: 0.6}   # iou_nms ne sert pas : DETR n'a pas de NMS
+# --- Etape 12 : exporter ---
+export: {openvino: true}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/detection/rfdetr_base_neudet, num_workers: 2}

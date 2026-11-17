@@ -1,0 +1,37 @@
+2026-11-05 18:18:07,148 | INFO | catalogue : 1344 images | layout image_mask | 1344 groupes
+2026-11-05 18:18:07,218 | INFO | decoupage enregistre : outputs/classical/magnetic_tile/split.csv
+split        test  train  val  All
+label                             
+MT_Blowhole    18     30   12   60
+MT_Break       18     30   12   60
+MT_Crack       17     28   12   57
+MT_Fray        10     16    6   32
+MT_Free        18     30   12   60
+MT_Uneven      18     30   12   60
+All            99    164   66  329
+2026-11-05 18:18:26,617 | INFO | seuils candidats sur val :
+ threshold   iou  dice  recall  false_alarm_rate
+     8.000 0.054 0.103   1.000             1.000
+    12.000 0.054 0.103   1.000             1.000
+    16.000 0.055 0.105   1.000             1.000
+    20.000 0.056 0.106   1.000             1.000
+    25.000 0.055 0.104   1.000             1.000
+    30.000 0.052 0.098   1.000             1.000
+    40.000 0.043 0.082   1.000             1.000
+    50.000 0.028 0.054   0.926             1.000
+    60.000 0.018 0.035   0.889             0.917
+seuil retenu : 20
+2026-11-05 18:18:32,360 | INFO | test (99 images) : IoU 0.061 | Dice 0.116 | rappel image 1.000 | fausses alarmes 1.000
+2026-11-05 18:21:46,736 | INFO | catalogue : 1344 images | layout image_mask | 1344 groupes
+2026-11-05 18:21:46,838 | INFO | decoupage enregistre : outputs/classical/magnetic_tile/split.csv
+split        test  train  val  All
+label                             
+MT_Blowhole    18     30   12   60
+MT_Break       18     30   12   60
+MT_Crack       17     28   12   57
+MT_Fray        10     16    6   32
+MT_Free        18     30   12   60
+MT_Uneven      18     30   12   60
+All            99    164   66  329
+2026-11-05 18:21:54,871 | INFO | reglage retenu sur val (critere dice) : seuil 0.040, aire min 50
+2026-11-05 18:21:56,844 | INFO | test (99 images) : IoU 0.058 | Dice 0.109 | rappel image 1.000 | fausses alarmes 1.000

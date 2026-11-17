@@ -1,0 +1,11 @@
+<View>
+  <Image name="image" value="$image" zoom="true"/>
+  <Choices name="choice" toName="image" choice="single" showInline="true">
+    <Choice value="crazing"/>
+    <Choice value="inclusion"/>
+    <Choice value="patches"/>
+    <Choice value="pitted_surface"/>
+    <Choice value="rolled-in_scale"/>
+    <Choice value="scratches"/>
+  </Choices>
+</View>

@@ -1,0 +1,9 @@
+2026-11-05 18:48:01,769 | INFO | run | sortie outputs/detection/quick_fasterrcnn | device cpu
+2026-11-05 18:57:22,478 | INFO | epoque  1 | perte 1.001 | val mAP50 0.033 mAP50-95 0.015 | 560s | meilleur
+2026-11-05 18:57:22,494 | INFO | entrainement fasterrcnn : 560.7 s
+2026-11-05 18:57:22,919 | INFO | entrainement fasterrcnn termine en 561 s -> outputs/detection/quick_fasterrcnn/best.pt
+2026-11-05 18:57:46,643 | INFO | prediction du test : 23.3 s
+2026-11-05 18:57:47,595 | INFO | test (36 images) : mAP50 0.068 | mAP50-95 0.032 | au seuil 0.25 : precision 0.000 rappel 0.000
+2026-11-05 18:57:52,184 | INFO | verification ONNX Faster R-CNN : {'boxes': 118, 'reference_boxes': 118, 'mean_iou': 0.9999998464422711}
+2026-11-05 18:57:53,789 | INFO | OpenVINO ecrit : outputs/detection/quick_fasterrcnn/model.xml
+2026-11-05 18:58:01,717 | INFO | latence : {'torch_cpu_ms': 271.29, 'batch': 1, 'onnxruntime_cpu_ms': 342.54, 'openvino_cpu_ms': 77.37}

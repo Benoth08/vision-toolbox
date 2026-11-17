@@ -1,0 +1,24 @@
+2026-11-05 19:04:13,142 | INFO | run | sortie outputs/segmentation/quick | device cpu
+2026-11-05 19:04:13,608 | WARNING | max_images=200 : 200 images sur 1344 gardees (essai rapide)
+2026-11-05 19:04:13,610 | INFO | catalogue : 200 images | layout image_mask | 200 groupes
+2026-11-05 19:04:13,642 | INFO | decoupage enregistre : outputs/segmentation/quick_split.csv
+split        test  train  val  All
+label                             
+MT_Blowhole     5     15    3   23
+MT_Break        2      6    1    9
+MT_Crack        2      6    2   10
+MT_Fray         0      2    0    2
+MT_Free        28     90   21  139
+MT_Uneven       3     11    3   17
+All            40    130   30  200
+2026-11-05 19:04:14,096 | INFO | encodeur resnet18 : poids ImageNet torchvision (1 canal/canaux, repetition x3)
+2026-11-05 19:04:14,101 | INFO | unet / resnet18 | 2 classes ['background', 'defect'] | 1 canal/canaux | 14,328,354 parametres
+2026-11-05 19:05:44,194 | INFO | epoque  1 | perte 1.3415 | val mIoU 0.321 | mIoU defauts 0.0206 | 90s | meilleur
+2026-11-05 19:07:21,449 | INFO | epoque  2 | perte 0.9618 | val mIoU 0.473 | mIoU defauts 0.0057 | 97s
+2026-11-05 19:07:21,449 | INFO | entrainement : 187.3 s
+2026-11-05 19:07:42,694 | INFO | prediction du test : 20.0 s
+2026-11-05 19:07:43,634 | INFO | test (40 images) : mIoU defauts 0.0089 | Dice defauts 0.0176 | rappel image 1.0 | fausses alarmes image 1.0
+2026-11-05 19:07:47,369 | INFO | ONNX ecrit : outputs/segmentation/quick/model.onnx (57.5 Mo)
+2026-11-05 19:07:49,179 | INFO | verification ONNX OK : {'output_0_max_abs_diff': '1.93e-05', 'output_0_scale': '1.00e+00', 'batch_size': 3}
+2026-11-05 19:07:50,322 | INFO | OpenVINO ecrit : outputs/segmentation/quick/model.xml
+2026-11-05 19:07:56,346 | INFO | latence : {'torch_cpu_ms': 461.35, 'batch': 1, 'onnxruntime_cpu_ms': 23.56, 'openvino_cpu_ms': 4.15}

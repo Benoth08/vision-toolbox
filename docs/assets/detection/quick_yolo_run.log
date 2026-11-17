@@ -1,0 +1,26 @@
+2026-11-05 18:38:26,887 | INFO | run | sortie outputs/detection/quick_yolo | device cpu
+2026-11-05 18:38:27,023 | WARNING | max_images=240 : 240 images sur 1770 gardees (essai rapide)
+2026-11-05 18:38:27,065 | INFO | decoupage enregistre : outputs/detection/quick_split.csv
+split            test  train  val  All
+label                                 
+crazing             7     33    7   47
+inclusion           7     30    6   43
+patches             5     23    5   33
+pitted_surface      5     25    5   35
+rolled-in_scale     6     27    6   39
+scratches           6     30    7   43
+All                36    168   36  240
+2026-11-05 18:38:27,087 | INFO | train :  168 images | objets par classe {'inclusion': 105, 'crazing': 75, 'patches': 73, 'scratches': 59, 'rolled-in_scale': 52, 'pitted_surface': 38}
+2026-11-05 18:38:27,087 | INFO | val   :   36 images | objets par classe {'inclusion': 28, 'crazing': 16, 'patches': 16, 'rolled-in_scale': 14, 'scratches': 14, 'pitted_surface': 9}
+2026-11-05 18:38:27,088 | INFO | test  :   36 images | objets par classe {'inclusion': 24, 'crazing': 17, 'patches': 17, 'rolled-in_scale': 12, 'scratches': 9, 'pitted_surface': 5}
+2026-11-05 18:39:07,747 | INFO | entrainement ultralytics : 40.6 s
+2026-11-05 18:39:08,300 | INFO | entrainement ultralytics termine en 41 s -> outputs/detection/quick_yolo/best.pt
+2026-11-05 18:39:09,195 | INFO | prediction du test : 0.8 s
+2026-11-05 18:39:10,151 | INFO | test (36 images) : mAP50 0.130 | mAP50-95 0.052 | au seuil 0.25 : precision 0.207 rappel 0.143
+2026-11-05 18:39:11,823 | INFO | verification ONNX Ultralytics : {'raw_max_abs_diff': 0.001953125, 'raw_scale': 483.2890625, 'boxes': 0, 'reference_boxes': 0, 'mean_iou': None}
+2026-11-05 18:39:13,209 | INFO | OpenVINO ecrit : outputs/detection/quick_yolo/model.xml
+2026-11-05 18:39:15,794 | INFO | latence : {'torch_cpu_ms': 46.78, 'batch': 1, 'onnxruntime_cpu_ms': 22.42, 'openvino_cpu_ms': 10.24}
+2026-11-05 18:59:36,733 | INFO | run | sortie outputs/detection/quick_yolo | device cpu
+2026-11-05 18:59:38,056 | INFO | verification ONNX Ultralytics : {'raw_max_abs_diff': 0.001953125, 'raw_scale': 483.2890625, 'boxes': 27, 'reference_boxes': 27, 'mean_iou': 0.9999991787804497}
+2026-11-05 18:59:38,981 | INFO | OpenVINO ecrit : outputs/detection/quick_yolo/model.xml
+2026-11-05 18:59:40,942 | INFO | latence : {'torch_cpu_ms': 197.38, 'batch': 1, 'onnxruntime_cpu_ms': 25.97, 'openvino_cpu_ms': 11.27}

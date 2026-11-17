@@ -1,0 +1,16 @@
+| experience                           | methode             |   auroc_image |   auroc_pixel |   rappel_au_seuil |   fausses_alarmes |   construction_s |   ms_par_image_torch |   onnx_ms |
+|:-------------------------------------|:--------------------|--------------:|--------------:|------------------:|------------------:|-----------------:|---------------------:|----------:|
+| anomalib_dfm_bottle                  | Dfm                 |         1     |         0.935 |             1     |             0.05  |             30.4 |                142.7 |     18.55 |
+| anomalib_fastflow_bottle             | Fastflow            |         1     |         0.972 |             1     |             0     |            226.6 |                491.5 |    119.76 |
+| anomalib_padim_bottle                | Padim               |         0.995 |         0.982 |             0.984 |             0.05  |             90.2 |                265.7 |    150.52 |
+| anomalib_padim_tile                  | Padim               |         0.928 |         0.727 |             0.52  |             0.016 |            102.7 |                 54.6 |     40.15 |
+| anomalib_patchcore_bottle            | Patchcore           |         1     |         0.982 |             1     |             0     |            460.6 |                311.9 |     36.76 |
+| anomalib_reverse_distillation_bottle | ReverseDistillation |         0.998 |         0.984 |             1     |             0.05  |            232.3 |                 66.7 |     44.01 |
+| anomalib_stfpm_bottle                | Stfpm               |         1     |         0.977 |             1     |             0.05  |            272.7 |                 55.6 |     27.11 |
+| anomalib_stfpm_tile                  | Stfpm               |         0.663 |         0.582 |             0.097 |             0.016 |            507.3 |                 47.5 |     30.95 |
+| anomalib_supersimplenet_bottle       | Supersimplenet      |         0.948 |         0.658 |             0.746 |             0     |            773.8 |                125.7 |     40.15 |
+| autoencoder_bottle                   | autoencoder         |         0.788 |         0.72  |             0.46  |             0     |           1135.9 |                 96.7 |     30.6  |
+| autoencoder_tile                     | autoencoder         |         0.541 |         0.595 |             0.028 |             0.005 |           1543.1 |                 45.9 |     37.2  |
+| patchcore_lite_bottle                | patchcore_lite      |         1     |         0.982 |             1     |             0     |            139.6 |                265.5 |    126.24 |
+| patchcore_lite_tile                  | patchcore_lite      |         0.965 |         0.749 |             0.651 |             0.01  |             76.1 |                 46.6 |     28.47 |
+| quick                                | Padim               |         0.997 |         0.975 |             0.984 |             0.05  |             24.1 |                102.5 |     10    |

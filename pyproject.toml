@@ -1,0 +1,83 @@
+[project]
+name = "vision-toolbox"
+version = "0.1.0"
+description = "Boite a outils de vision industrielle : recettes de production reutilisables (classification, detection, segmentation, anomalies)"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.5",
+    "torchvision>=0.20",
+    "numpy",
+    "pandas",
+    "pillow",
+    "opencv-python",          # version avec fenetres (outils d'annotation) ; ultralytics l'exige aussi
+    "scikit-learn",
+    "scipy",                  # tests statistiques (vtb.toolkit.stats, derive)
+    "matplotlib",
+    "pyyaml",
+    "pydantic>=2",
+    "tqdm",
+    "onnx",
+    "onnxruntime",
+    "onnxscript",
+    "tabulate",               # tableaux markdown des scripts compare / benchmark
+]
+
+[project.scripts]
+vtb-kit = "vtb.toolkit.__main__:main"   # outils de travail : vtb-kit --help
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "ipykernel", "jupytext", "nbclient", "nbformat", "ipywidgets"]
+detection = ["ultralytics>=8.3", "pycocotools"]         # YOLO11, YOLO11-OBB, YOLO11-seg (licence AGPL-3.0)
+rfdetr = ["rfdetr[train]>=1.11"]                          # RF-DETR (Roboflow, Apache-2.0 pour nano a base)
+yolox = ["pycocotools", "loguru", "tabulate", "thop"]    # + yolox==0.3.0 a installer a part (voir README)
+anomaly = ["anomalib>=2.7"]                              # PatchCore, PaDiM, STFPM, FastFlow, EfficientAd, DRAEM...
+segmentation = ["segmentation-models-pytorch>=0.4"]
+export = ["openvino>=2024.0"]
+serve = ["fastapi", "uvicorn", "python-multipart", "httpx"]  # service HTTP sans PyTorch (vtb.serve)
+runpod = ["runpod"]                                       # tools/runpod/run_remote.py (GPU a la demande)
+all = ["vision-toolbox[dev,detection,rfdetr,yolox,anomaly,segmentation,export,serve,runpod]"]
+
+# --- uv : PyTorch en version CPU, pris sur l'index officiel de PyTorch ---
+# (retirer ce bloc, ou changer l'index en cu124 / cu126, pour une version GPU)
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+torchvision = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"vtb.annotate" = ["templates/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+    "slow: test long (entrainement court sur de vraies donnees)",
+    "needs_data: a besoin des jeux de donnees telecharges",
+]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::FutureWarning"]
+
+[tool.ruff]
+line-length = 140
+target-version = "py311"
+extend-exclude = ["data", "outputs", "weights", "csharp", "*.ipynb", "docs/*.md"]  # notebooks generes depuis les .py (verifies), articles
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP"]
+ignore = ["B905"]
+
+[tool.ruff.lint.per-file-ignores]
+"recipes/*/notebooks/*" = ["E402", "E501"]
+"notebooks/*" = ["E402", "E501"]

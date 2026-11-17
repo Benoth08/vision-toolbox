@@ -1,0 +1,25 @@
+# Magnetic Tile (surface texturee, proche de l acier) : PatchCore de la toolbox ; ~650 normales x 1024 zones = 660 000 vecteurs,
+# memoire de 0,5 % (3 300 vecteurs, comme 1 % de 200 images) pour tenir en RAM et en temps sur CPU.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/magnetic_tile      # tools/get_data/get_magnetic_tile.py : MT_<classe>/Imgs/x.jpg + masque x.png
+  layout: image_mask
+  extensions: [.jpg]                # les .png du meme dossier sont les masques
+# --- Etape 3 : cataloguer (etiquettes considerees normales) ---
+normal_labels: [MT_Free]            # 952 images sans defaut ; les 5 autres classes sont des defauts
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/anomaly/tile_split.csv
+  val_fraction: 0.15
+  test_fraction: 0.2                # normales mises de cote pour le test (le rangement n'en fournit pas)
+# --- Etape 5 : pretraiter ---
+preprocess:
+  - {name: resize, size: 256}       # tailles d'origine variables : toutes ramenees a 256 x 256
+# --- Etape 11 : evaluer (carte lissee, score image, seuils sur les normales de validation) ---
+scoring: {gaussian_sigma: 4.0, image_score: max, image_quantile: 0.99}
+# --- Etapes 7 a 10 : choix de la methode ---
+method: patchcore_lite
+# --- Etapes 7 a 10 : lots, modele, memoire a la place de l'entrainement (methode patchcore_lite) ---
+patchcore_lite: {layers: [layer2, layer3], memory_fraction: 0.005, coreset: greedy}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/anomaly/patchcore_lite_tile, num_workers: 2}

@@ -1,0 +1,32 @@
+# YOLOX-tiny sur NEU-DET : alternative Apache-2.0 a YOLO11 (licence AGPL), meme decoupage, meme evaluateur.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_det/IMAGES
+  layout: annotations
+  annotations_dir: data/raw/neu_det/ANNOTATIONS
+  annotation_format: voc
+  color: gray
+# --- Etape 4 : decouper ---
+split: {file: outputs/detection/neu_det_split.csv, strategy: stratified, val_fraction: 0.15, test_fraction: 0.15}
+# --- Etapes 6 a 10 : choix du moteur de detection ---
+backend: yolox
+# --- Etapes 6 a 10 : augmentation, lots, modele, perte et optimiseur, entrainement (moteur yolox) ---
+yolox:
+  variant: tiny                        # nano | tiny | s | m | l (poids : weights/yolox_<variant>.pth)
+  weights: weights/yolox_tiny.pth
+  input_size: 320
+  epochs: 40
+  batch_size: 16
+  basic_lr_per_img: 1.5625e-4          # lr = 0.01 pour un lot de 64 (valeur officielle), mise a l'echelle du lot
+  warmup_epochs: 2
+  min_lr_ratio: 0.05
+  ema: true                            # moyenne mobile des poids : evaluee et sauvegardee a la place du modele brut
+  flip_prob: 0.5
+  hsv_prob: 1.0
+  patience: 8
+# --- Etapes 11 et 13 : evaluer et predire (seuils de confiance et de NMS) ---
+evaluation: {conf_eval: 0.001, conf_predict: 0.25, iou_nms: 0.6}
+# --- Etape 12 : exporter ---
+export: {openvino: true}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/detection/yolox_tiny_neudet, num_workers: 2}

@@ -1,0 +1,39 @@
+{
+  "domain_auc": 0.999,
+  "verdict": "derive forte : reevaluer le modele avant de lui faire confiance",
+  "n_reference": 300,
+  "n_current": 150,
+  "simulated": [
+    {
+      "name": "gamma",
+      "gamma": 1.4
+    },
+    {
+      "name": "gaussian_blur",
+      "sigma": 1.2
+    }
+  ],
+  "top_statistics": [
+    {
+      "statistic": "sharpness",
+      "ks": 0.7,
+      "p_value": 1.5077986991110622e-47,
+      "reference_median": 377.8203,
+      "current_median": 12.969
+    },
+    {
+      "statistic": "saturated_fraction",
+      "ks": 0.33,
+      "p_value": 4.442898046831884e-10,
+      "reference_median": 0.0,
+      "current_median": 0.0
+    },
+    {
+      "statistic": "mean",
+      "ks": 0.26,
+      "p_value": 2.2302154761044714e-06,
+      "reference_median": 0.4696,
+      "current_median": 0.3543
+    }
+  ]
+}

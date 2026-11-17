@@ -1,0 +1,48 @@
+# Meme atelier avec un eclairage inegal SIMULE (vignettage aleatoire par image) : la ou la correction de shading doit servir.
+# Valide par vtb.preprocess.benchmark.PreprocessingConfig (une cle inconnue est une erreur).
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_cls_flat
+  layout: class_folders
+  color: gray                      # les images sont grises : pas de canaux inutiles
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/preprocessing/steel_vignetted/split.csv
+  strategy: stratified
+  val_fraction: 0.2
+  test_fraction: 0.2               # le test n'est jamais lu par l'atelier
+# --- Reglages generaux (etape 1) ---
+runtime:
+  output_dir: outputs/preprocessing/steel_vignetted
+  seed: 42
+# --- Etape 5 : pretraiter (les chaines candidates) ---
+pipelines:                         # chaque pipeline est juge a la metrique par compare.py
+  none: []
+  stretch:
+    - {name: percentile_stretch, low: 1, high: 99}
+  shading:
+    - {name: shading_division, sigma: 25, downscale: 2}   # sigma ~ 1/8 de la taille d'une image de 200 px
+  clahe:
+    - {name: clahe, clip_limit: 2.0, tile_grid: 4}
+  shading_clahe:
+    - {name: shading_division, sigma: 25, downscale: 2}
+    - {name: clahe, clip_limit: 2.0, tile_grid: 4}
+  median_clahe:
+    - {name: median_blur, ksize: 3}
+    - {name: clahe, clip_limit: 2.0, tile_grid: 4}
+  dog:
+    - {name: difference_of_gaussians, sigma_small: 1.0, sigma_large: 6.0}
+# --- Etape 5 : pretraiter (planches avant / apres, pour regarder) ---
+gallery:
+  images:
+    - data/raw/neu_cls_flat/crazing/Cr_1.bmp
+    - data/raw/neu_cls_flat/scratches/Sc_1.bmp
+    - data/raw/neu_cls_flat/patches/Pa_1.bmp
+    - data/raw/magnetic_tile/MT_Crack/Imgs/exp1_num_249594.jpg
+    - data/raw/mvtec_bottle/test/broken_large/000.png
+  assets_dir: null                 # planches deja produites par steel_gray
+# --- Etape 5 : pretraiter (comparaison des chaines a la metrique, sur la validation) ---
+compare:
+  image_size: 128
+  max_per_class: 100
+  simulate_vignetting: 0.7         # vignettage de force 0.35 a 0.7, centre tire au hasard

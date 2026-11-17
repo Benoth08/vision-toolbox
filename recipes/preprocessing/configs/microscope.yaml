@@ -1,0 +1,30 @@
+# Modele de configuration : images de microscope a champ d'illumination inhomogene.
+# Remplacer data.root par le dossier de tes images (un sous-dossier par classe), puis lancer
+# gallery.py et compare.py. Si tu peux acquerir une image sans echantillon (lame vide), le
+# flat_field est la correction exacte ; sinon shading_division avec un sigma grand devant les objets.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/my_microscope
+  layout: class_folders
+  color: rgb
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/preprocessing/microscope/split.csv
+# --- Reglages generaux (etape 1) ---
+runtime:
+  output_dir: outputs/preprocessing/microscope
+# --- Etape 5 : pretraiter (les chaines candidates) ---
+pipelines:
+  none: []
+  shading:
+    - {name: shading_division, sigma: 80, downscale: 8}
+  shading_median:
+    - {name: shading_division, sigma: 80, method: median, downscale: 8}   # robuste aux objets tres clairs
+  # flat_field:                                                         # a activer avec une image de reference
+  #   - {name: flat_field, flat_path: data/raw/my_microscope_flat.png}
+  shading_clahe:
+    - {name: shading_division, sigma: 80, downscale: 8}
+    - {name: clahe, clip_limit: 2.0}
+# --- Etape 5 : pretraiter (planches avant / apres, pour regarder) ---
+gallery:
+  assets_dir: null

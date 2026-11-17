@@ -1,0 +1,10 @@
+2026-11-05 18:21:34,551 | INFO | catalogue : 292 images | layout mvtec | 292 groupes
+2026-11-05 18:21:34,644 | INFO | decoupage enregistre : outputs/classical/mvtec_bottle_reference/split.csv
+split   test  train  val  All
+label                        
+defect    38      0   25   63
+good      12    209    8  229
+All       50    209   33  292
+2026-11-05 18:21:36,009 | INFO | reference : median de 60 images normales de train
+2026-11-05 18:21:39,386 | INFO | reglage retenu sur val (critere recall_at_max_false_alarm) : seuil 0.250, aire min 60
+2026-11-05 18:21:41,855 | INFO | test (50 images) : IoU 0.044 | Dice 0.084 | rappel image 0.605 | fausses alarmes 0.000

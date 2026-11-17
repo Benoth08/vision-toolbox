@@ -1,0 +1,29 @@
+# Segmentation d'INSTANCES (YOLO11-seg) sur Magnetic Tile : un contour par defaut, donc surface et longueur mesurables.
+# Polygones tires des masques ; pour la segmentation semantique pure (un masque par pixel), voir recipes/segmentation.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/magnetic_tile
+  layout: annotations
+  annotations_dir: data/raw/magnetic_tile
+  annotation_format: masks
+  annotation_options: {kind: polygons, extensions: [".jpg"], min_area: 20, epsilon: 1.0}
+  object_label_from: folder
+  extensions: [".jpg"]
+  color: gray
+  groups_csv: outputs/explore/magnetic_tile/groups.csv   # quasi-doublons (meme tuile, plusieurs expositions) du meme cote
+# --- Etape 4 : decouper ---
+split: {file: outputs/detection/tile_split.csv, strategy: grouped, val_fraction: 0.15, test_fraction: 0.2}
+# --- Etapes 6 a 10 : choix du moteur de detection ---
+backend: ultralytics
+# --- Etapes 6 a 10 : augmentation, lots, modele, perte et optimiseur, entrainement (moteur ultralytics) ---
+ultralytics:
+  weights: weights/yolo11n-seg.pt
+  task: segment
+  imgsz: 416
+  epochs: 80
+  batch: 16
+  patience: 20
+# --- Etapes 11 et 13 : evaluer et predire (seuils de confiance et de NMS) ---
+evaluation: {conf_eval: 0.001, conf_predict: 0.25, iou_nms: 0.6}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/detection/yolo11n_seg_tile, num_workers: 2}

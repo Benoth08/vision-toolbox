@@ -1,0 +1,31 @@
+# Modele de configuration : images thermiques ou radiographiques 16 bits.
+# Les reseaux pre-entraines attendent du 8 bits : window_level choisit la plage utile (en
+# niveaux bruts du capteur) et l'etale sur 0-255. Les valeurs de center / width se mesurent sur
+# quelques images representatives (histogramme), puis restent FIXES : une fenetre calculee image
+# par image (center / width absents) change l'echelle des temperatures d'une image a l'autre.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/my_thermal
+  layout: class_folders
+  color: gray
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/preprocessing/thermal16/split.csv
+# --- Reglages generaux (etape 1) ---
+runtime:
+  output_dir: outputs/preprocessing/thermal16
+# --- Etape 5 : pretraiter (les chaines candidates) ---
+pipelines:
+  auto_window:
+    - {name: window_level}                                   # percentiles 1-99, image par image
+  fixed_window:
+    - {name: window_level, center: 30000, width: 8000}       # a mesurer sur tes images
+  fixed_window_clahe:
+    - {name: window_level, center: 30000, width: 8000}
+    - {name: clahe, clip_limit: 2.0}
+  log_then_8bits:
+    - {name: log_transform, strength: 50}
+    - {name: to_uint8}
+# --- Etape 5 : pretraiter (planches avant / apres, pour regarder) ---
+gallery:
+  assets_dir: null

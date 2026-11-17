@@ -1,0 +1,38 @@
+[
+  {
+    "name": "crazing",
+    "color": "#e6194b",
+    "type": "any",
+    "attributes": []
+  },
+  {
+    "name": "inclusion",
+    "color": "#3cb44b",
+    "type": "any",
+    "attributes": []
+  },
+  {
+    "name": "patches",
+    "color": "#ffe119",
+    "type": "any",
+    "attributes": []
+  },
+  {
+    "name": "pitted_surface",
+    "color": "#0082c8",
+    "type": "any",
+    "attributes": []
+  },
+  {
+    "name": "rolled-in_scale",
+    "color": "#f58230",
+    "type": "any",
+    "attributes": []
+  },
+  {
+    "name": "scratches",
+    "color": "#911eb4",
+    "type": "any",
+    "attributes": []
+  }
+]

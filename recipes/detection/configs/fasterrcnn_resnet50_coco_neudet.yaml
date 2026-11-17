@@ -1,0 +1,25 @@
+# Faster R-CNN resnet50 FPN v2 pre-entraine COCO (detecteur complet, tete remplacee) : le plus precis, GPU conseille.
+# Poids telecharges par torchvision (download.pytorch.org) ; hors ligne : TORCH_HOME vers un cache.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_det/IMAGES
+  layout: annotations
+  annotations_dir: data/raw/neu_det/ANNOTATIONS
+  annotation_format: voc
+  color: gray
+# --- Etape 4 : decouper ---
+split: {file: outputs/detection/neu_det_split.csv, strategy: stratified, val_fraction: 0.15, test_fraction: 0.15}
+# --- Etape 6 : augmenter (fasterrcnn seulement : les autres moteurs ont leurs augmentations) ---
+augment:
+  - {name: hflip}
+  - {name: vflip}
+# --- Etapes 6 a 10 : choix du moteur de detection ---
+backend: fasterrcnn
+# --- Etapes 7 a 10 : lots, modele, perte et optimiseur, entrainement (moteur fasterrcnn) ---
+fasterrcnn: {backbone: resnet50_fpn, pretrained: coco, trainable_layers: 3, min_size: 320, max_size: 512, epochs: 15, batch_size: 4, lr: 0.01, patience: 5}
+# --- Etapes 11 et 13 : evaluer et predire (seuils de confiance et de NMS) ---
+evaluation: {conf_eval: 0.001, conf_predict: 0.5, iou_nms: 0.5}
+# --- Etape 12 : exporter ---
+export: {openvino: true}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/detection/fasterrcnn_resnet50_coco_neudet, num_workers: 2}

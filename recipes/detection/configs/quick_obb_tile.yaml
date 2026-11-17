@@ -1,0 +1,28 @@
+# Verification rapide (CPU, 1 epoque, 200 images) de la chaine OBB sur Magnetic Tile.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/magnetic_tile         # tools/get_data/get_magnetic_tile.py : MT_<defaut>/Imgs/*.jpg + masque *.png
+  layout: annotations
+  annotations_dir: data/raw/magnetic_tile   # masques a cote des images
+  annotation_format: masks
+  annotation_options: {kind: rotated, extensions: [".jpg"], min_area: 20}
+  object_label_from: folder            # masques binaires : la classe est le dossier (MT_Blowhole, MT_Crack...)
+  extensions: [".jpg"]
+  color: gray
+  max_images: 200
+# --- Etape 4 : decouper ---
+split: {file: outputs/detection/quick_tile_split.csv, strategy: stratified, val_fraction: 0.15, test_fraction: 0.2}
+# --- Etapes 6 a 10 : choix du moteur de detection ---
+backend: ultralytics
+# --- Etapes 6 a 10 : augmentation, lots, modele, perte et optimiseur, entrainement (moteur ultralytics) ---
+ultralytics:
+  weights: weights/yolo11n-obb.pt      # telecharge depuis GitHub par Ultralytics s'il manque
+  task: obb
+  imgsz: 256
+  epochs: 1
+  batch: 16
+  patience: 1
+# --- Etapes 11 et 13 : evaluer et predire (seuils de confiance et de NMS) ---
+evaluation: {conf_eval: 0.001, conf_predict: 0.25, iou_nms: 0.6}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/detection/quick_obb_tile, num_workers: 0}

@@ -1,0 +1,21 @@
+# Controle et exploration de NEU-CLS (6 defauts de laminage, 1800 images 200 x 200) avant la classification.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_cls_flat          # tools/get_data/get_neu_cls.py : un dossier par classe
+  layout: class_folders
+  color: gray
+# --- Etape 4 : decouper (controle des doublons a cheval sur un decoupage existant) ---
+split_file: outputs/classification/split.csv   # facultatif : verifie aussi les doublons a cheval sur train / test
+# --- Etape 5 : pretraiter (taille fixe pour calculer les plongements) ---
+preprocess:
+  - {name: resize, size: 224}          # taille d'entree du reseau de plongements
+# --- Etape 2 : explorer (reseau gele qui calcule les plongements) ---
+model: resnet18                        # reseau du zoo sans sa tete (vtb.models.zoo)
+# --- Etape 2 : explorer (nombre de groupes de plongements) ---
+n_clusters: 6
+# --- Etape 2 : explorer (projection 2D des plongements) ---
+projection: tsne                       # pca : rapide ; tsne : groupes locaux plus lisibles
+# --- Etape 2 : explorer (quasi-doublons : ecart maximal entre empreintes) ---
+max_hamming: 6                         # candidats dHash, confirmes par la correlation des details
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/explore/neu_cls, num_workers: 0}

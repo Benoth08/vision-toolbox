@@ -1,0 +1,49 @@
+2026-11-05 19:13:30,059 | INFO | run | sortie outputs/segmentation/unet_resnet18_tile_cpu | device cpu
+2026-11-05 19:13:30,637 | INFO | encodeur resnet18 : poids ImageNet torchvision (1 canal/canaux, repetition x3)
+2026-11-05 19:13:30,639 | INFO | unet / resnet18 | 2 classes ['background', 'defect'] | 1 canal/canaux | 14,328,354 parametres
+2026-11-05 19:19:13,100 | INFO | epoque  1 | perte 0.7494 | val mIoU 0.486 | mIoU defauts 0.0 | 342s | meilleur
+2026-11-05 19:23:55,605 | INFO | epoque  2 | perte 0.5473 | val mIoU 0.637 | mIoU defauts 0.3023 | 283s | meilleur
+2026-11-05 19:38:44,609 | INFO | epoque  3 | perte 0.4408 | val mIoU 0.656 | mIoU defauts 0.3469 | 889s | meilleur
+2026-11-05 19:51:13,541 | INFO | epoque  4 | perte 0.3992 | val mIoU 0.651 | mIoU defauts 0.3363 | 749s
+2026-11-05 20:00:32,388 | INFO | epoque  5 | perte 0.3385 | val mIoU 0.753 | mIoU defauts 0.5253 | 559s | meilleur
+2026-11-05 21:12:32,198 | INFO | run | sortie outputs/segmentation/unet_resnet18_tile_cpu | device cpu
+2026-11-05 21:12:32,655 | INFO | encodeur resnet18 : poids ImageNet torchvision (1 canal/canaux, repetition x3)
+2026-11-05 21:12:32,656 | INFO | unet / resnet18 | 2 classes ['background', 'defect'] | 1 canal/canaux | 14,328,354 parametres
+2026-11-05 21:14:50,221 | INFO | epoque  1 | perte 0.7494 | val mIoU 0.486 | mIoU defauts 0.0 | 138s | meilleur
+2026-11-05 21:15:33,731 | INFO | epoque  2 | perte 0.5479 | val mIoU 0.635 | mIoU defauts 0.2952 | 44s | meilleur
+2026-11-05 21:16:17,216 | INFO | epoque  3 | perte 0.4556 | val mIoU 0.651 | mIoU defauts 0.3303 | 43s | meilleur
+2026-11-05 21:16:59,400 | INFO | epoque  4 | perte 0.3923 | val mIoU 0.692 | mIoU defauts 0.4058 | 42s | meilleur
+2026-11-05 21:17:41,726 | INFO | epoque  5 | perte 0.3271 | val mIoU 0.710 | mIoU defauts 0.4393 | 42s | meilleur
+2026-11-05 21:18:25,667 | INFO | epoque  6 | perte 0.3128 | val mIoU 0.715 | mIoU defauts 0.4498 | 44s | meilleur
+2026-11-05 21:18:25,667 | INFO | entrainement : 353.0 s
+2026-11-05 21:18:32,690 | INFO | prediction du test : 6.0 s
+2026-11-05 21:18:33,536 | INFO | test (269 images) : mIoU defauts 0.5064 | Dice defauts 0.6723 | rappel image 0.4684 | fausses alarmes image 0.0368
+2026-11-05 21:18:37,256 | INFO | ONNX ecrit : outputs/segmentation/unet_resnet18_tile_cpu/model.onnx (57.5 Mo, lot dynamique)
+2026-11-05 21:18:37,469 | INFO | verification ONNX OK : {'output_0_max_abs_diff': '2.37e-05', 'output_0_scale': '1.00e+00', 'batch_size': 3}
+2026-11-05 21:18:38,073 | INFO | OpenVINO ecrit : outputs/segmentation/unet_resnet18_tile_cpu/model.xml
+2026-11-05 21:18:39,864 | INFO | latence : {'torch_cpu_ms': 23.43, 'batch': 1, 'onnxruntime_cpu_ms': 11.38, 'openvino_cpu_ms': 3.42}
+2026-11-05 21:19:10,003 | INFO | run | sortie outputs/segmentation/unet_resnet18_tile_cpu | device cpu
+2026-11-05 21:19:10,479 | INFO | encodeur resnet18 : poids ImageNet torchvision (1 canal/canaux, repetition x3)
+2026-11-05 21:19:10,481 | INFO | unet / resnet18 | 2 classes ['background', 'defect'] | 1 canal/canaux | 14,328,354 parametres
+2026-11-05 21:19:51,852 | INFO | epoque  1 | perte 0.7494 | val mIoU 0.486 | mIoU defauts 0.0 | 41s | meilleur
+2026-11-05 21:20:33,829 | INFO | epoque  2 | perte 0.5533 | val mIoU 0.586 | mIoU defauts 0.2253 | 42s | meilleur
+2026-11-05 21:21:16,289 | INFO | epoque  3 | perte 0.4553 | val mIoU 0.589 | mIoU defauts 0.2029 | 42s
+2026-11-05 21:21:58,676 | INFO | epoque  4 | perte 0.4203 | val mIoU 0.664 | mIoU defauts 0.3635 | 42s | meilleur
+2026-11-05 21:22:40,407 | INFO | epoque  5 | perte 0.3380 | val mIoU 0.682 | mIoU defauts 0.3929 | 42s | meilleur
+2026-11-05 21:23:22,864 | INFO | epoque  6 | perte 0.3354 | val mIoU 0.710 | mIoU defauts 0.4374 | 42s | meilleur
+2026-11-05 21:24:05,496 | INFO | epoque  7 | perte 0.2985 | val mIoU 0.782 | mIoU defauts 0.5782 | 43s | meilleur
+2026-11-05 21:24:48,470 | INFO | epoque  8 | perte 0.2448 | val mIoU 0.805 | mIoU defauts 0.623 | 43s | meilleur
+2026-11-05 21:25:30,805 | INFO | epoque  9 | perte 0.2645 | val mIoU 0.776 | mIoU defauts 0.5654 | 42s
+2026-11-05 21:26:14,019 | INFO | epoque 10 | perte 0.2257 | val mIoU 0.811 | mIoU defauts 0.6337 | 43s | meilleur
+2026-11-05 21:26:56,723 | INFO | epoque 11 | perte 0.2021 | val mIoU 0.835 | mIoU defauts 0.6812 | 43s | meilleur
+2026-11-05 21:27:39,321 | INFO | epoque 12 | perte 0.2143 | val mIoU 0.853 | mIoU defauts 0.7143 | 43s | meilleur
+2026-11-05 21:28:22,965 | INFO | epoque 13 | perte 0.1740 | val mIoU 0.859 | mIoU defauts 0.7271 | 44s | meilleur
+2026-11-05 21:29:06,196 | INFO | epoque 14 | perte 0.1609 | val mIoU 0.857 | mIoU defauts 0.7234 | 43s
+2026-11-05 21:29:50,463 | INFO | epoque 15 | perte 0.1662 | val mIoU 0.862 | mIoU defauts 0.733 | 44s | meilleur
+2026-11-05 21:29:50,463 | INFO | entrainement : 640.0 s
+2026-11-05 21:29:57,185 | INFO | prediction du test : 5.8 s
+2026-11-05 21:29:58,084 | INFO | test (269 images) : mIoU defauts 0.7047 | Dice defauts 0.8268 | rappel image 0.6076 | fausses alarmes image 0.0158
+2026-11-05 21:30:01,845 | INFO | ONNX ecrit : outputs/segmentation/unet_resnet18_tile_cpu/model.onnx (57.5 Mo, lot dynamique)
+2026-11-05 21:30:02,041 | INFO | verification ONNX OK : {'output_0_max_abs_diff': '3.58e-06', 'output_0_scale': '1.00e+00', 'batch_size': 3}
+2026-11-05 21:30:02,532 | INFO | OpenVINO ecrit : outputs/segmentation/unet_resnet18_tile_cpu/model.xml
+2026-11-05 21:30:04,428 | INFO | latence : {'torch_cpu_ms': 21.2, 'batch': 1, 'onnxruntime_cpu_ms': 10.43, 'openvino_cpu_ms': 2.52}

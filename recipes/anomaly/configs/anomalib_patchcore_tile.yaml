@@ -1,0 +1,26 @@
+# Magnetic Tile : PatchCore d'anomalib.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/magnetic_tile      # tools/get_data/get_magnetic_tile.py : MT_<classe>/Imgs/x.jpg + masque x.png
+  layout: image_mask
+  extensions: [.jpg]                # les .png du meme dossier sont les masques
+# --- Etape 3 : cataloguer (etiquettes considerees normales) ---
+normal_labels: [MT_Free]            # 952 images sans defaut ; les 5 autres classes sont des defauts
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/anomaly/tile_split.csv
+  val_fraction: 0.15
+  test_fraction: 0.2                # normales mises de cote pour le test (le rangement n'en fournit pas)
+# --- Etape 5 : pretraiter ---
+preprocess:
+  - {name: resize, size: 256}       # tailles d'origine variables : toutes ramenees a 256 x 256
+# --- Etape 11 : evaluer (carte lissee, score image, seuils sur les normales de validation) ---
+scoring: {gaussian_sigma: 4.0, image_score: max, image_quantile: 0.99}
+# --- Etapes 7 a 10 : choix de la methode ---
+method: anomalib
+# --- Etapes 7 a 10 : lots, modele, perte et optimiseur, entrainement (methode anomalib) ---
+anomalib:
+  model: Patchcore
+  params: {backbone: resnet18, layers: [layer2, layer3], coreset_sampling_ratio: 0.01, num_neighbors: 9}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/anomaly/anomalib_patchcore_tile, num_workers: 0}

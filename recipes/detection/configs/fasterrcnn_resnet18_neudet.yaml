@@ -1,0 +1,35 @@
+# Faster R-CNN (torchvision, BSD) sur NEU-DET : 100 % PyTorch, backbone resnet18 ImageNet + FPN.
+# Deux etages (propositions puis classement) : souvent meilleur sur les petits objets, plus lent qu'un YOLO.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_det/IMAGES
+  layout: annotations
+  annotations_dir: data/raw/neu_det/ANNOTATIONS
+  annotation_format: voc
+  color: gray
+# --- Etape 4 : decouper ---
+split: {file: outputs/detection/neu_det_split.csv, strategy: stratified, val_fraction: 0.15, test_fraction: 0.15}
+# --- Etape 6 : augmenter (fasterrcnn seulement : les autres moteurs ont leurs augmentations) ---
+augment:
+  - {name: hflip}
+  - {name: vflip}                      # sans risque pour ces defauts (pas d'orientation privilegiee)
+# --- Etapes 6 a 10 : choix du moteur de detection ---
+backend: fasterrcnn
+# --- Etapes 7 a 10 : lots, modele, perte et optimiseur, entrainement (moteur fasterrcnn) ---
+fasterrcnn:
+  backbone: resnet18_fpn               # resnet50_fpn / mobilenet_v3_fpn ; pretrained: coco pour le detecteur COCO complet
+  pretrained: imagenet
+  trainable_layers: 3                  # 0 = backbone gele ; 5 = tout entraine
+  min_size: 320
+  max_size: 512
+  epochs: 20
+  batch_size: 4
+  lr: 0.01
+  weight_decay: 1.0e-4
+  patience: 5
+# --- Etapes 11 et 13 : evaluer et predire (seuils de confiance et de NMS) ---
+evaluation: {conf_eval: 0.001, conf_predict: 0.5, iou_nms: 0.5}
+# --- Etape 12 : exporter ---
+export: {openvino: true}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/detection/fasterrcnn_resnet18_neudet, num_workers: 2}

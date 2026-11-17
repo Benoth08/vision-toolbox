@@ -1,0 +1,10 @@
+# Derive : NEU-DET principal (reference) contre le dossier de validation livre a part (meme acquisition).
+# Attendu : AUC proche de 0,5 (pas de derive). Peu d'images courantes (30) : l'AUC est bruitee.
+# --- Etapes 2 et 3 : importer et cataloguer (images de reference : celles de l'entrainement) ---
+reference: {root: data/raw/neu_det/IMAGES, layout: flat, color: gray}
+# --- Etapes 2 et 3 : importer et cataloguer (images recentes de la ligne, apres l'etape 13) ---
+current: {root: data/raw/neu_det/Validation_Images, layout: flat, color: gray}
+# --- Etape 2 : explorer (nombre d'images par cote) ---
+max_images: 300
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/explore/drift_none, num_workers: 0}

@@ -1,0 +1,14 @@
+# Service de prediction (ONNX + carte du modele), sans PyTorch : image d'environ 400 Mo.
+#   docker build -f docker/Dockerfile.serve -t vtb-serve .
+#   docker run -p 8000:8000 -v %CD%/outputs/classification/resnet18_partial:/model vtb-serve
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+RUN pip install --no-cache-dir numpy pandas pydantic pyyaml pillow opencv-python-headless onnxruntime fastapi uvicorn python-multipart
+
+WORKDIR /app
+COPY src/vtb /app/vtb
+ENV PYTHONPATH=/app
+
+EXPOSE 8000
+CMD ["python", "-m", "vtb.serve", "--model", "/model", "--host", "0.0.0.0", "--port", "8000"]

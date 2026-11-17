@@ -1,0 +1,30 @@
+# U-Net resnet18 sur Magnetic Tile complet, reglee pour un CPU : 128 px, 15 epoques (environ 12 min sur 2 coeurs libres).
+# Moins precise que unet_resnet18_tile (256 px, 40 epoques, GPU), mais donne de vrais chiffres sans GPU.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/magnetic_tile
+  layout: image_mask
+  extensions: [".jpg"]
+  color: gray
+  groups_csv: outputs/explore/magnetic_tile/groups.csv   # lancer d'abord recipes/explore/scripts/check_dataset.py (magnetic_tile)
+# --- Etape 3 : cataloguer (comment un masque lu devient des classes de pixels) ---
+mask_mode: binary
+# --- Etape 4 : decouper ---
+split: {file: outputs/segmentation/tile_split.csv, strategy: grouped, val_fraction: 0.15, test_fraction: 0.2}
+# --- Etape 5 : pretraiter ---
+preprocess:
+  - {name: resize, size: 128}
+# --- Etape 6 : augmenter ---
+augment:
+  - {name: hflip}
+  - {name: vflip}
+# --- Etape 8 : modele ---
+model: {architecture: unet, encoder: resnet18, encoder_weights: imagenet}
+# --- Etapes 7, 9 et 10 : lots, perte et optimiseur, entrainement ---
+train: {epochs: 15, batch_size: 16, lr: 1.0e-3, encoder_lr_factor: 0.1, loss: dice_ce, patience: 4}
+# --- Etape 11 : evaluer ---
+evaluation: {threshold: 0.5, min_defect_area: 10}
+# --- Etape 12 : exporter ---
+export: {openvino: true}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/segmentation/unet_resnet18_tile_cpu, num_workers: 2}

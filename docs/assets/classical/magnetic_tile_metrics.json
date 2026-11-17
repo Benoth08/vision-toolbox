@@ -1,0 +1,10 @@
+{
+  "method": "response",
+  "n_test": 99,
+  "threshold": 0.04,
+  "min_area": 50.0,
+  "iou": 0.05763580285060984,
+  "dice": 0.10898988611252762,
+  "recall": 1.0,
+  "false_alarm_rate": 1.0
+}

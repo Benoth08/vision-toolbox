@@ -1,0 +1,16 @@
+# Controle et exploration de Magnetic Tile (6 dossiers dont MT_Free, tailles d'image variables, masques a cote).
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/magnetic_tile
+  layout: image_mask
+  extensions: [".jpg"]                 # les .png sont les masques
+  color: gray
+# --- Etape 5 : pretraiter (taille fixe pour calculer les plongements) ---
+preprocess:
+  - {name: resize, size: 224}
+# --- Etape 2 : explorer (nombre de groupes de plongements) ---
+n_clusters: 6
+# --- Etape 2 : explorer (projection 2D des plongements) ---
+projection: tsne
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/explore/magnetic_tile, num_workers: 0}

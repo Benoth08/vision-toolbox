@@ -1,0 +1,41 @@
+# Donnees, sorties et poids : jamais dans le depot (taille, licences, confidentialite)
+data/raw/
+data/processed/
+outputs/
+weights/
+runs/
+*.pt
+*.pth
+
+# Secrets : uniquement dans l'environnement ou un .env local
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+build/
+dist/
+
+# Editeurs et systemes
+.vscode/*
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# C# (dossiers de compilation)
+csharp/**/bin/
+csharp/**/obj/
+
+# Ajouts pour la publication : regles d exclusion de tous les depots
+data/
+*.ckpt
+*.onnx
+*.safetensors

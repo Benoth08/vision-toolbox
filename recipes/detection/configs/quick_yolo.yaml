@@ -1,0 +1,31 @@
+# Verification rapide de la chaine YOLO11 (quelques minutes sur CPU) : 240 images NEU-DET, 2 epoques.
+# A relancer apres toute modification ; la precision n'a aucun sens ici, seule la chaine compte.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_det/IMAGES          # tools/get_data/get_neu_det.py : IMAGES/*.jpg + ANNOTATIONS/*.xml
+  layout: annotations
+  annotations_dir: data/raw/neu_det/ANNOTATIONS
+  annotation_format: voc                 # voc | yolo | coco | labelme | labelstudio | cvat | masks | vtb
+  color: gray                            # images d'acier en niveaux de gris (copiees sur 3 canaux pour le reseau)
+  max_images: 240                        # essai rapide uniquement
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/detection/quick_split.csv
+  strategy: stratified                   # sur la classe principale de chaque image
+  val_fraction: 0.15
+  test_fraction: 0.15
+# --- Etapes 6 a 10 : choix du moteur de detection ---
+backend: ultralytics
+# --- Etapes 6 a 10 : augmentation, lots, modele, perte et optimiseur, entrainement (moteur ultralytics) ---
+ultralytics:
+  weights: weights/yolo11n.pt            # poids COCO ; telecharges depuis GitHub par Ultralytics s'ils manquent
+  imgsz: 320
+  epochs: 2
+  batch: 16
+  patience: 2
+  close_mosaic: 1
+  warmup_epochs: 1
+# --- Etape 12 : exporter ---
+export: {openvino: true, latency_runs: 5}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/detection/quick_yolo, num_workers: 0}

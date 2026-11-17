@@ -1,0 +1,44 @@
+# DeepLabV3+ + resnet18 sur Magnetic Tile : convolutions dilatees (contexte large), bords un peu moins nets que U-Net.
+# Meme decoupage et meme evaluation que unet_resnet18_tile : comparaison directe.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/magnetic_tile
+  layout: image_mask
+  extensions: [".jpg"]
+  color: gray                          # 1 canal ; copie sur 3 canaux dans le modele (poids ImageNet exacts)
+  groups_csv: outputs/explore/magnetic_tile/groups.csv   # recipes/explore check_dataset : 418 images en 161 groupes de quasi-doublons
+# --- Etape 3 : cataloguer (comment un masque lu devient des classes de pixels) ---
+mask_mode: binary
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/segmentation/tile_split.csv   # le meme decoupage pour toutes les architectures
+  strategy: grouped                    # une meme tuile vue sous plusieurs expositions reste d'un seul cote
+  val_fraction: 0.15
+  test_fraction: 0.2
+# --- Etape 5 : pretraiter ---
+preprocess:
+  - {name: resize, size: 256}
+# --- Etape 6 : augmenter ---
+augment:
+  - {name: hflip}
+  - {name: vflip}
+  - {name: brightness_contrast, brightness: 0.15, contrast: 0.15}
+# --- Etape 8 : modele ---
+model:
+  architecture: deeplabv3plus                 # unet | unetplusplus | fpn | deeplabv3plus | pspnet | linknet | manet | segformer
+  encoder: resnet18                    # resnet34, efficientnet-b0, mit_b0 (segformer)... ; resnet* : poids torchvision
+  encoder_weights: imagenet
+# --- Etapes 7, 9 et 10 : lots, perte et optimiseur, entrainement ---
+train:
+  epochs: 40
+  batch_size: 8
+  lr: 3.0e-4
+  encoder_lr_factor: 0.1               # encodeur pre-entraine : pas 10 fois plus petits
+  loss: dice_ce                        # le fond represente plus de 99 % des pixels : Dice corrige ce desequilibre
+  patience: 8
+# --- Etape 11 : evaluer ---
+evaluation: {threshold: 0.5, min_defect_area: 20}
+# --- Etape 12 : exporter ---
+export: {openvino: true}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/segmentation/deeplabv3plus_resnet18_tile, num_workers: 2}

@@ -1,0 +1,30 @@
+{
+  "domain_auc": 0.422,
+  "verdict": "pas de derive detectable",
+  "n_reference": 300,
+  "n_current": 30,
+  "simulated": [],
+  "top_statistics": [
+    {
+      "statistic": "mean",
+      "ks": 0.187,
+      "p_value": 0.2700300807820738,
+      "reference_median": 0.4696,
+      "current_median": 0.5075
+    },
+    {
+      "statistic": "sharpness",
+      "ks": 0.143,
+      "p_value": 0.5900962150869326,
+      "reference_median": 377.8203,
+      "current_median": 654.919
+    },
+    {
+      "statistic": "std",
+      "ks": 0.13,
+      "p_value": 0.7077802853799419,
+      "reference_median": 0.0884,
+      "current_median": 0.1001
+    }
+  ]
+}

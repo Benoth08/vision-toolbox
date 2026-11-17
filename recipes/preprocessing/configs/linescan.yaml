@@ -1,0 +1,29 @@
+# Modele de configuration : camera lineaire au-dessus d'une bande (l'inhomogeneite est dans la largeur).
+# column_profile divise chaque colonne par son profil median : il retire les bandes verticales
+# fixes du capteur et l'eclairage inegal en largeur ; auto_roi en mode columns retire le fond
+# de part et d'autre de la bande ; fft_notch retire un motif periodique fixe (traces de cylindres).
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/my_linescan
+  layout: class_folders
+  color: gray
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/preprocessing/linescan/split.csv
+# --- Reglages generaux (etape 1) ---
+runtime:
+  output_dir: outputs/preprocessing/linescan
+# --- Etape 5 : pretraiter (les chaines candidates) ---
+pipelines:
+  none: []
+  columns:
+    - {name: column_profile, axis: columns}
+  roi_columns:
+    - {name: auto_roi, mode: columns, margin: 4}
+    - {name: column_profile, axis: columns}
+  columns_notch:
+    - {name: column_profile, axis: columns}
+    - {name: fft_notch, protect_radius: 8, threshold: 8}
+# --- Etape 5 : pretraiter (planches avant / apres, pour regarder) ---
+gallery:
+  assets_dir: null

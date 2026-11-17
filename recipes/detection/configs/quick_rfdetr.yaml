@@ -1,0 +1,27 @@
+# Verification rapide de la chaine RF-DETR nano (CPU) : memes 240 images NEU-DET que quick_yolo, 1 epoque, 256 px.
+# weights: null = depart de zero (aucun telechargement) ; la chaine est verifiee, pas la precision.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_det/IMAGES
+  layout: annotations
+  annotations_dir: data/raw/neu_det/ANNOTATIONS
+  annotation_format: voc
+  color: gray
+  max_images: 240
+# --- Etape 4 : decouper ---
+split: {file: outputs/detection/quick_split.csv, strategy: stratified, val_fraction: 0.15, test_fraction: 0.15}
+# --- Etapes 6 a 10 : choix du moteur de detection ---
+backend: rfdetr
+# --- Etapes 6 a 10 : augmentation, lots, modele, perte et optimiseur, entrainement (moteur rfdetr) ---
+rfdetr:
+  size: nano
+  weights: null                        # weights/rf-detr-nano.pth : poids COCO (tools/fetch_weights.py --rfdetr nano)
+  resolution: 256                      # multiple de 64 ; 384 par defaut pour nano
+  epochs: 1
+  batch_size: 4
+  grad_accum_steps: 1
+  patience: 0
+# --- Etape 12 : exporter ---
+export: {openvino: true, latency_runs: 3}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/detection/quick_rfdetr, num_workers: 0}

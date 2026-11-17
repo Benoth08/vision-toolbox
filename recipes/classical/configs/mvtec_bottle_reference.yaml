@@ -1,0 +1,38 @@
+# Comparaison a une piece de reference sur MVTec AD bottle (bouteilles vues de dessus, bien centrees).
+# Valide par vtb.classical.baseline.ClassicalConfig. La reference est la mediane d'images normales de
+# train ; val et test sont tires du test MVTec (normales + defauts) ; le test est lu une seule fois.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/mvtec_bottle
+  layout: mvtec
+  color: gray
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/classical/mvtec_bottle_reference/split.csv
+  val_fraction: 0.4                  # part du test MVTec gardee pour regler seuil et aire
+  test_fraction: 0.6
+# --- Reglages generaux (etape 1) ---
+runtime:
+  output_dir: outputs/classical/mvtec_bottle_reference
+  seed: 42
+# --- A la place des etapes 8 a 10 : pas de modele appris, une methode classique ---
+method: reference
+# --- Etape 5 : pretraiter (ici : la carte de reponse, ou la mise a l'echelle commune) ---
+preprocess:
+  - {name: resize, size: 256}        # meme echelle pour la reference et les images
+# --- A la place des etapes 8 a 10 : la piece de reference (methode reference) ---
+reference:
+  n_images: 60
+  statistic: median
+  align: ecc
+  blur_sigma: 2.0
+# --- Etape 11 : evaluer (seuils essayes sur la validation) ---
+thresholds: [0.08, 0.12, 0.16, 0.2, 0.25, 0.3]
+# --- Etape 11 : evaluer (aires minimales essayees sur la validation) ---
+min_areas: [20, 60, 150]
+# --- Etape 11 : evaluer (critere de choix sur la validation) ---
+select: recall_at_max_false_alarm    # critere industriel : le meilleur rappel sans fausse alarme sur val
+# --- Etape 11 : evaluer (fausses alarmes tolerees sur la validation) ---
+max_false_alarm: 0.0
+# --- Hors fil : dossier des figures de la documentation ---
+assets_dir: docs/assets/classical

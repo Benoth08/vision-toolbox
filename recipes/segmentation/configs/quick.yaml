@@ -1,0 +1,29 @@
+# Verification rapide de la chaine (quelques minutes sur CPU) : U-Net resnet18 a 128 px, 200 images Magnetic Tile, 2 epoques.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/magnetic_tile         # tools/get_data/get_magnetic_tile.py : MT_<defaut>/Imgs/*.jpg + masque *.png
+  layout: image_mask                   # masque de meme nom, a cote de l'image (ou dans masks_dir)
+  extensions: [".jpg"]                 # sinon les masques .png seraient lus comme des images
+  color: gray
+  max_images: 200
+# --- Etape 3 : cataloguer (comment un masque lu devient des classes de pixels) ---
+mask_mode: binary                      # fond / defaut
+# --- Etape 4 : decouper ---
+split: {file: outputs/segmentation/quick_split.csv, strategy: stratified, val_fraction: 0.15, test_fraction: 0.2}
+# --- Etape 5 : pretraiter ---
+preprocess:
+  - {name: resize, size: 128}          # obligatoire : lots de taille fixe ; le masque suit au plus proche voisin
+# --- Etape 6 : augmenter ---
+augment:
+  - {name: hflip}
+  - {name: vflip}
+# --- Etape 8 : modele ---
+model: {architecture: unet, encoder: resnet18, encoder_weights: imagenet}
+# --- Etapes 7, 9 et 10 : lots, perte et optimiseur, entrainement ---
+train: {epochs: 2, batch_size: 8, lr: 3.0e-4, patience: 2}
+# --- Etape 11 : evaluer ---
+evaluation: {threshold: 0.5, min_defect_area: 10}
+# --- Etape 12 : exporter ---
+export: {openvino: true, latency_runs: 5}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/segmentation/quick, num_workers: 0}

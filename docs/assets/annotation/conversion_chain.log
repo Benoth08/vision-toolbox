@@ -1,0 +1,6 @@
+     format  images  boites  differences  secondes
+       coco    1770    4126            0      0.13
+    labelme    1770    4126            0      4.15
+labelstudio    1770    4126            0      0.37
+       cvat    1770    4126            0      0.11
+        vtb    1770    4126            0      0.19

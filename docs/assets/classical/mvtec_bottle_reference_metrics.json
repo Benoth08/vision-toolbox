@@ -1,0 +1,10 @@
+{
+  "method": "reference",
+  "n_test": 50,
+  "threshold": 0.25,
+  "min_area": 60.0,
+  "iou": 0.04385594266680568,
+  "dice": 0.08402681035615718,
+  "recall": 0.6052631578947368,
+  "false_alarm_rate": 0.0
+}

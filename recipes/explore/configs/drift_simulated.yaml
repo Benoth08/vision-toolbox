@@ -1,0 +1,14 @@
+# Derive SIMULEE pour la demonstration : memes images courantes, assombries et legerement floues
+# (eclairage qui vieillit, objectif encrasse). Attendu : AUC proche de 1 et "mean" / "sharpness" en tete.
+# --- Etapes 2 et 3 : importer et cataloguer (images de reference : celles de l'entrainement) ---
+reference: {root: data/raw/neu_det/IMAGES, layout: flat, color: gray}
+# --- Etapes 2 et 3 : importer et cataloguer (images recentes de la ligne, apres l'etape 13) ---
+current: {root: data/raw/neu_det/IMAGES, layout: flat, color: gray, max_images: 150}
+# --- Hors fil : derive simulee pour la demonstration ---
+simulate:
+  - {name: gamma, gamma: 1.4}          # > 1 : image plus sombre
+  - {name: gaussian_blur, sigma: 1.2}
+# --- Etape 2 : explorer (nombre d'images par cote) ---
+max_images: 300
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/explore/drift_simulated, num_workers: 0}

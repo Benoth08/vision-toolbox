@@ -1,0 +1,36 @@
+# YOLO11n sur NEU-DET (6 defauts de laminage a chaud, 200 x 200 px) : la reference "detection" de la toolbox.
+# GPU conseille (quelques minutes) ; environ 2 h sur un CPU portable.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_det/IMAGES
+  layout: annotations
+  annotations_dir: data/raw/neu_det/ANNOTATIONS
+  annotation_format: voc
+  color: gray
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/detection/neu_det_split.csv   # le meme decoupage pour tous les moteurs : ils restent comparables
+  strategy: stratified
+  val_fraction: 0.15
+  test_fraction: 0.15
+# --- Etape 5 : pretraiter ---
+preprocess: []                         # ex. [{name: clahe, clip_limit: 2.0}] : applique au jeu YOLO ET en production
+# --- Etapes 6 a 10 : choix du moteur de detection ---
+backend: ultralytics
+# --- Etapes 6 a 10 : augmentation, lots, modele, perte et optimiseur, entrainement (moteur ultralytics) ---
+ultralytics:
+  weights: weights/yolo11n.pt          # yolo11s.pt / yolo11m.pt : plus precis, plus lents
+  task: detect
+  imgsz: 320                           # le plus petit multiple de 32 confortable pour des images de 200 px
+  epochs: 60
+  batch: 16
+  patience: 20
+  close_mosaic: 10                     # dernieres epoques sans mosaic : le modele voit des images "normales"
+  warmup_epochs: 3
+  extra: {}                            # tout argument de model.train : {lr0: 0.01, degrees: 0, fliplr: 0.5, mosaic: 1.0}
+# --- Etapes 11 et 13 : evaluer et predire (seuils de confiance et de NMS) ---
+evaluation: {conf_eval: 0.001, conf_predict: 0.25, iou_nms: 0.6}
+# --- Etape 12 : exporter ---
+export: {openvino: true}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/detection/yolo11n_neudet, num_workers: 2}

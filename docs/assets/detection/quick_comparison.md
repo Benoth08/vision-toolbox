@@ -1,0 +1,8 @@
+| experience       | moteur      | modele                             | split                                  |   entree_px |   temps_s |   test_map50 |   test_map50_95 |   precision@conf |   rappel@conf |   onnx_ms |
+|:-----------------|:------------|:-----------------------------------|:---------------------------------------|------------:|----------:|-------------:|----------------:|-----------------:|--------------:|----------:|
+| quick_fasterrcnn | fasterrcnn  | fasterrcnn:fasterrcnn_resnet18_fpn | outputs/detection/quick_split.csv      |         224 |     560.7 |        0.068 |           0.032 |           0      |        0      |    342.54 |
+| quick_obb_tile   | ultralytics | ultralytics:yolo11n-obb            | outputs/detection/quick_tile_split.csv |         256 |      13.3 |        0     |           0     |           0      |        0      |     17.97 |
+| quick_rfdetr     | rfdetr      | rfdetr:rfdetr_nano                 | outputs/detection/quick_split.csv      |         256 |    1083.5 |        0.002 |           0.001 |           0      |        0      |    160.18 |
+| quick_seg_tile   | ultralytics | ultralytics:yolo11n-seg            | outputs/detection/quick_tile_split.csv |         256 |      13.4 |        0     |           0     |           0      |        0      |     26.58 |
+| quick_yolo       | ultralytics | ultralytics:yolo11n                | outputs/detection/quick_split.csv      |         320 |      40.6 |        0.13  |           0.052 |           0.2069 |        0.1429 |     25.97 |
+| quick_yolox      | yolox       | yolox:yolox_tiny                   | outputs/detection/quick_split.csv      |         320 |     470.2 |        0.137 |           0.076 |           0.4375 |        0.0833 |     54.56 |

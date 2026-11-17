@@ -1,0 +1,34 @@
+2026-11-05 18:04:30,218 | INFO | run | sortie outputs/classification/resnet18_partial | device cpu
+2026-11-05 18:04:30,602 | INFO | classes ['crazing', 'inclusion', 'patches', 'pitted', 'rolled', 'scratches'] | train 1260 | val 270 | entree (128, 128, 3) | mean [0.485, 0.456, 0.406]
+2026-11-05 18:04:30,602 | INFO | strategie partial | parametres entrainables 8396806 sur 11179590
+2026-11-05 18:04:58,310 | INFO | epoque  1 | train perte 0.2622 acc 0.925 | val perte 0.0315 acc 0.989 | lr 1.0e-03 | 28s | meilleur
+2026-11-05 18:05:11,119 | INFO | epoque  2 | train perte 0.0388 acc 0.987 | val perte 0.0201 acc 0.996 | lr 1.0e-03 | 13s | meilleur
+2026-11-05 18:05:23,466 | INFO | epoque  3 | train perte 0.0107 acc 0.998 | val perte 0.0073 acc 0.996 | lr 1.0e-03 | 12s | meilleur
+2026-11-05 18:05:35,771 | INFO | epoque  4 | train perte 0.0114 acc 0.998 | val perte 0.0030 acc 1.000 | lr 1.0e-03 | 12s | meilleur
+2026-11-05 18:05:48,549 | INFO | epoque  5 | train perte 0.0113 acc 0.996 | val perte 0.0019 acc 1.000 | lr 1.0e-03 | 13s | meilleur
+2026-11-05 18:06:34,704 | INFO | epoque  6 | train perte 0.0072 acc 0.998 | val perte 0.0021 acc 1.000 | lr 1.0e-03 | 46s
+2026-11-05 18:07:39,139 | INFO | epoque  7 | train perte 0.0130 acc 0.996 | val perte 0.0017 acc 1.000 | lr 1.0e-03 | 64s | meilleur
+2026-11-05 18:09:10,417 | INFO | epoque  8 | train perte 0.0117 acc 0.995 | val perte 0.0037 acc 1.000 | lr 1.0e-03 | 91s
+2026-11-05 18:10:51,365 | INFO | epoque  9 | train perte 0.0080 acc 0.997 | val perte 0.0117 acc 0.996 | lr 1.0e-03 | 101s
+2026-11-05 18:12:28,529 | INFO | epoque 10 | train perte 0.0028 acc 1.000 | val perte 0.0074 acc 0.996 | lr 5.0e-04 | 97s
+2026-11-05 18:12:28,531 | INFO | entrainement : 477.9 s
+2026-11-05 18:12:41,223 | INFO | meilleure epoque 7 | val perte 0.0017 acc 1.000 -> outputs/classification/resnet18_partial/model.pt
+2026-11-05 18:13:01,019 | INFO | test : accuracy 1.000 | balanced 1.000 | F1 macro 1.000 | 270 images
+              precision    recall  f1-score   support
+
+     crazing      1.000     1.000     1.000        45
+   inclusion      1.000     1.000     1.000        45
+     patches      1.000     1.000     1.000        45
+      pitted      1.000     1.000     1.000        45
+      rolled      1.000     1.000     1.000        45
+   scratches      1.000     1.000     1.000        45
+
+    accuracy                          1.000       270
+   macro avg      1.000     1.000     1.000       270
+weighted avg      1.000     1.000     1.000       270
+
+2026-11-05 18:13:08,069 | INFO | ONNX ecrit : outputs/classification/resnet18_partial/model.onnx (44.8 Mo)
+2026-11-05 18:13:10,212 | INFO | verification ONNX OK : {'output_0_max_abs_diff': '1.05e-05', 'batch_size': 3}
+2026-11-05 18:13:13,208 | INFO | OpenVINO ecrit : outputs/classification/resnet18_partial/model.xml
+2026-11-05 18:13:29,637 | INFO | latence : {'torch_cpu_ms': 623.76, 'batch': 1, 'onnxruntime_cpu_ms': 20.58, 'openvino_cpu_ms': 7.45}
+2026-11-05 18:13:29,666 | INFO | carte du modele -> outputs/classification/resnet18_partial/model_card.json

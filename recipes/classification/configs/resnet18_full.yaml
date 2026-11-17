@@ -1,0 +1,28 @@
+# Transfert, strategie full : tout le reseau apprend, a faible taux, avec montee progressive et decroissance cosinus.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_cls_flat       # tools/get_data/get_neu_cls.py : un dossier par classe
+  layout: class_folders
+  color: rgb                         # gray : 1 canal ; rgb : le gris recopie sur 3 canaux (poids ImageNet)
+# --- Etape 4 : decouper ---
+split:
+  file: outputs/classification/split.csv   # le meme decoupage pour toutes les experiences : elles restent comparables
+  strategy: stratified
+  val_fraction: 0.15
+  test_fraction: 0.15
+# --- Etape 5 : pretraiter ---
+preprocess:
+  - {name: resize, size: 128}         # NEU-CLS fait 200 px ; 128 garde les defauts visibles et va 2,5 fois plus vite que 200
+# --- Etape 6 : augmenter ---
+augment:
+  - {name: hflip}
+  - {name: vflip}
+# --- Etape 8 : modele ---
+model:
+  name: resnet18
+  pretrained: true
+  transfer: {strategy: full}
+# --- Etapes 7, 9 et 10 : lots, perte et optimiseur, entrainement ---
+train: {epochs: 8, batch_size: 32, lr: 0.0003, weight_decay: 0.0001, patience: 4, scheduler: cosine, warmup_epochs: 1}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/classification/resnet18_full, seed: 42, num_workers: 2}

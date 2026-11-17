@@ -1,0 +1,30 @@
+# Verification rapide de la chaine Faster R-CNN (CPU) : memes 240 images, 1 epoque, backbone resnet18 ImageNet.
+# --- Etapes 2 et 3 : importer et cataloguer ---
+data:
+  root: data/raw/neu_det/IMAGES
+  layout: annotations
+  annotations_dir: data/raw/neu_det/ANNOTATIONS
+  annotation_format: voc
+  color: gray
+  max_images: 240
+# --- Etape 4 : decouper ---
+split: {file: outputs/detection/quick_split.csv, strategy: stratified, val_fraction: 0.15, test_fraction: 0.15}
+# --- Etape 6 : augmenter (fasterrcnn seulement : les autres moteurs ont leurs augmentations) ---
+augment:
+  - {name: hflip}                        # torchvision v2 retourne les boites avec l'image
+# --- Etapes 6 a 10 : choix du moteur de detection ---
+backend: fasterrcnn
+# --- Etapes 7 a 10 : lots, modele, perte et optimiseur, entrainement (moteur fasterrcnn) ---
+fasterrcnn:
+  backbone: resnet18_fpn
+  pretrained: imagenet                   # seul le backbone est pre-entraine ; RPN et tete partent de zero
+  trainable_layers: 3
+  min_size: 224
+  max_size: 320
+  epochs: 1
+  batch_size: 4
+  lr: 0.01
+# --- Etape 12 : exporter ---
+export: {openvino: true, latency_runs: 3}
+# --- Reglages generaux (etape 1) ---
+runtime: {output_dir: outputs/detection/quick_fasterrcnn, num_workers: 0}
