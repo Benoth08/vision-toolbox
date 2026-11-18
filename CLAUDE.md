@@ -91,7 +91,7 @@ Chaque recette a un notebook autonome dans `notebooks/` (00 a 19, liste dans `no
 - `vtb.toolkit` / `vtb-kit` : outils de travail (donnees, lr_find, overfit_one_batch, statistiques).
 - `vtb.augment` : toute operation d'augmentation ecrite a la main passe
   `vtb.augment.check_alignment` (boites et masques suivent l'image) ; un preset se regarde
-  (`preview`) avant d'entrainer. Albumentations n'est pas une dependance (AlbumentationsX : AGPL).
+  (`preview`) avant d'entrainer.
 
 ## Definition de fin d'un lot de travail
 

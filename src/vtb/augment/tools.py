@@ -5,13 +5,6 @@
     check_alignment(aug, "detection")   # boites et masques suivent-ils l'image ?
     benchmark_ops(size=(256, 256))      # images / s par operation : trouver le goulot
     augmentation_catalog()              # toutes les operations, familles, taches, parametres
-
-Albumentations : le paquet d'origine `albumentations` (licence MIT) est archive depuis juillet 2025
-(derniere version 2.0.8, plus de correctifs) ; la suite, `albumentationsx`, est sous double licence
-AGPL-3.0 / commerciale (comme Ultralytics). La toolbox n'en depend pas ; `from_albumentations`
-permet de brancher un Compose existant si on choisit l'une des deux en connaissance de cause.
-Sources : https://github.com/albumentations-team/albumentations (archive le 10 juillet 2025) et
-https://albumentations.ai/blog/2025/01-albumentationsx-dual-licensing/
 """
 
 from __future__ import annotations  # permet d'ecrire les types (ex. "str | None") sans qu'ils soient evalues au chargement
@@ -298,53 +291,3 @@ def worker_init_fn(worker_id: int) -> None:  # appelee par le DataLoader au dema
     seed = torch.initial_seed() % 2**32  # graine torch de ce worker, ramenee a 32 bits (limite de numpy)
     np.random.seed(seed)  # seme le generateur numpy avec elle
     random.seed(seed)  # seme aussi le generateur standard de Python
-
-
-# --- Albumentations (optionnel, non installe par la toolbox) --------------------------------------
-
-
-class AlbumentationsAdapter:  # enveloppe un Compose Albumentations pour l'utiliser comme une augmentation de la toolbox
-    """Fait d'un A.Compose une augmentation au contrat de la toolbox : aug(x), aug(x, boxes), aug(x, mask).
-
-    Pour les boites, creer le Compose avec
-        A.BboxParams(format="pascal_voc", label_fields=["bbox_ids"])
-    l'adaptateur passe l'indice de chaque boite dans `bbox_ids` : une boite retiree par
-    Albumentations revient comme boite vide (taille 0), que sanitize_boxes retire ensuite AVEC
-    son etiquette (le nombre de boites reste celui de l'entree, l'ordre aussi).
-    """
-
-    def __init__(self, compose: Callable[..., dict[str, Any]]) -> None:  # compose : la chaine Albumentations
-        self.compose = compose  # garde la chaine
-
-    def __call__(self, image: torch.Tensor, target: Any = None) -> Any:  # applique la chaine a l'image (et a sa cible)
-        array = image.detach().cpu().numpy().transpose(1, 2, 0).astype(np.float32)  # tenseur (C, H, W) -> tableau (H, W, C)
-        if target is None:  # si pas de cible (classification)
-            out = self.compose(image=array)  # Albumentations prend et renvoie un dictionnaire
-            return self._image(out["image"], image)  # renvoie l'image reconvertie en tenseur
-        if isinstance(target, tv_tensors.Mask):  # si la cible est un masque (segmentation)
-            out = self.compose(image=array, mask=target.as_subclass(torch.Tensor).cpu().numpy())  # transforme image et masque
-            mask = torch.as_tensor(np.asarray(out["mask"]), dtype=target.dtype)  # masque transforme, en tenseur du meme type
-            return self._image(out["image"], image), tv_tensors.Mask(mask)  # renvoie l'image et le masque
-        if isinstance(target, tv_tensors.BoundingBoxes):  # si la cible est des boites (detection)
-            boxes = target.as_subclass(torch.Tensor).reshape(-1, 4).tolist()  # boites en liste Python (supposees XYXY)
-            # transforme image et boites ; bbox_ids = numero de chaque boite, pour savoir lesquelles reviennent
-            out = self.compose(image=array, bboxes=boxes, bbox_ids=list(range(len(boxes))))
-            new_image = self._image(out["image"], image)  # image transformee en tenseur
-            result = torch.zeros(len(boxes), 4)  # autant de boites qu'en entree, vides (0) par defaut
-            for box, index in zip(out["bboxes"], out["bbox_ids"], strict=True):  # pour chaque boite rendue et son numero
-                result[int(index)] = torch.as_tensor(list(box)[:4], dtype=torch.float32)  # remise a sa place d'origine
-            # renvoie l'image et les boites (format XYXY, taille de la nouvelle image)
-            return new_image, tv_tensors.BoundingBoxes(result, format="XYXY", canvas_size=tuple(new_image.shape[-2:]))
-        raise TypeError("cible attendue : tv_tensors.Mask ou tv_tensors.BoundingBoxes")  # autre cible : erreur claire
-
-    @staticmethod  # methode sans self : simple fonction rangee dans la classe
-    def _image(array: Any, like: torch.Tensor) -> torch.Tensor:  # tableau (H, W[, C]) -> tenseur (C, H, W) dans [0, 1]
-        array = np.asarray(array, dtype=np.float32)  # tableau numpy de decimaux
-        chw = array[None] if array.ndim == 2 else array.transpose(2, 0, 1)  # remet les canaux en premier
-        return torch.from_numpy(np.ascontiguousarray(chw)).to(like.device).clamp(0, 1)  # tenseur sur le meme appareil, borne a [0, 1]
-
-
-# renvoie l'adaptateur d'une chaine Albumentations
-def from_albumentations(compose: Callable[..., dict[str, Any]]) -> AlbumentationsAdapter:
-    """Adaptateur d'un A.Compose (Albumentations ou AlbumentationsX, a installer soi-meme : voir la licence en tete)."""
-    return AlbumentationsAdapter(compose)  # simple raccourci vers la classe

@@ -749,9 +749,6 @@ A.describe(load_config("recipes/classification/configs/quick.yaml", Classificati
 # %% [markdown]
 # ## Pour aller plus loin
 #
-# - Albumentations : le paquet MIT d'origine est archive (2.0.8, juillet 2025), la suite
-#   AlbumentationsX est sous AGPL-3.0 / licence commerciale ; `A.from_albumentations(compose)`
-#   branche un Compose existant si on en a besoin (voir la docstring de `vtb.augment.tools`).
 # - Augmentation sur GPU par lot : torchvision v2 accepte des tenseurs (N, C, H, W) sur GPU
 #   (memes parametres pour tout le lot) ; Kornia tire des parametres par image.
 # - Le notebook 07 (classification) et la recette segmentation montrent l'augmentation dans un

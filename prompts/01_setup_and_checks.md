@@ -20,7 +20,7 @@ lourds (pas d'entrainements en parallele : la memoire du poste est limitee).
    MVTec bottle, Magnetic Tile). Si un telechargement est bloque, le noter et continuer.
 3. Poids : `python tools/fetch_weights.py` (par defaut : resnet18 torchvision, YOLO11n
    boites / OBB / seg, YOLOX-tiny, RF-DETR nano). Noter ce qui est bloque.
-4. Tests : `uv run pytest` (575 tests attendus, quelques minutes), puis `uv run ruff check .`
+4. Tests : `uv run pytest` (574 tests attendus, quelques minutes), puis `uv run ruff check .`
    et `uv run ruff format --check .`. Tout echec specifique a Windows (chemins, encodage,
    separateurs, multiprocessing des DataLoader, fenetres OpenCV) se corrige DANS LE CODE,
    jamais en affaiblissant un test.

@@ -15,13 +15,11 @@ from .mixing import CopyPaste, DefectBank, DefectInstance, MixCollate, batch_aug
 from .ops import SyntheticDefect, synthesize_defect  # ops.py : ajout d'un defaut synthetique dans l'image et le masque
 from .presets import PRESETS, preset_steps  # presets.py : listes d'augmentations pretes et extraction de leurs etapes
 from .tools import (  # tools.py : outils pour decrire, regarder, controler et chronometrer les augmentations
-    AlbumentationsAdapter,  # adaptateur pour utiliser une chaine Albumentations
     alignment_pattern,  # image test avec boites et masque connus
     augmentation_catalog,  # tableau de toutes les operations disponibles
     benchmark_ops,  # mesure du temps de chaque operation
     check_alignment,  # verifie que boites et masques suivent l'image
     describe,  # tableau des etapes d'une chaine d'augmentation
-    from_albumentations,  # raccourci vers AlbumentationsAdapter
     presets_table,  # tableau de tous les presets
     preview,  # affiche plusieurs tirages d'augmentation sur une image
     worker_init_fn,  # seme numpy et random dans chaque worker du DataLoader
@@ -34,7 +32,6 @@ from .transforms import OPS, available_augmentations, available_presets, build_a
 __all__ = [  # noms publics du module : ce que "from vtb.augment import *" importe
     "OPS",  # registre : nom d'operation -> fiche
     "PRESETS",  # registre : nom de preset -> preset
-    "AlbumentationsAdapter",  # adaptateur Albumentations
     "CopyPaste",  # copy-paste applique avec une probabilite
     "DefectBank",  # banque de defauts a coller
     "DefectInstance",  # un defaut decoupe (pixels, opacite, classe)
@@ -52,7 +49,6 @@ __all__ = [  # noms publics du module : ce que "from vtb.augment import *" impor
     "copy_paste",  # colle des defauts sur une image
     "describe",  # tableau des etapes d'une chaine
     "expand_steps",  # remplace les presets par leurs etapes
-    "from_albumentations",  # raccourci vers AlbumentationsAdapter
     "mosaic",  # mosaique de 4 images (detection)
     "preset_steps",  # etapes d'un preset pour une tache
     "presets_table",  # tableau des presets

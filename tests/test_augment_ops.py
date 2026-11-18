@@ -31,7 +31,6 @@ from vtb.augment import (  # les elements du module utilises directement
     copy_paste,  # fonction de collage de defauts (version directe de CopyPaste)
     describe,  # tableau qui decrit les etapes d'une augmentation
     expand_steps,  # remplace un preset par la liste de ses etapes
-    from_albumentations,  # adapte une augmentation de la bibliotheque Albumentations au contrat de la toolbox
     mosaic,  # assemble 4 images en une (mosaique facon YOLO)
     synthesize_defect,  # dessine un faux defaut sur une image saine
 )
@@ -300,33 +299,6 @@ def test_synthetic_defect_writes_the_mask_and_needs_one():
     defect_image, defect_mask = synthesize_defect(torch.full((3, 32, 32), 0.5), "perlin")
     # bonnes tailles, et le masque n'est pas vide
     assert defect_image.shape == (3, 32, 32) and defect_mask.shape == (32, 32) and defect_mask.any()
-
-
-# Verifie l'adaptateur Albumentations (autre bibliotheque d'augmentation tres utilisee) avec un faux Compose qui retourne
-# l'image et perd une boite. Attraperait : boites et etiquettes desynchronisees quand Albumentations retire une boite.
-def test_albumentations_adapter_with_a_compose_lookalike():
-    class FakeCompose:  # se comporte comme A.Compose(..., bbox_params=A.BboxParams("pascal_voc", label_fields=["bbox_ids"]))
-        def __call__(self, image, mask=None, bboxes=None, bbox_ids=None):  # meme facon d'appeler qu'Albumentations
-            out = {"image": image[:, ::-1].copy()}  # retourne l'image gauche-droite (image numpy hauteur x largeur x canaux)
-            if mask is not None:  # si un masque est fourni
-                out["mask"] = mask[:, ::-1].copy()  # le retourne pareil
-            if bboxes is not None:  # retourne et perd la 2e boite
-                width = image.shape[1]  # largeur de l'image
-                # retournement d'une boite : nouveau x1 = largeur - ancien x2 ; on saute la boite numero 1
-                kept = [(width - b[2], b[1], width - b[0], b[3]) for i, b in enumerate(bboxes) if i != 1]
-                out["bboxes"], out["bbox_ids"] = kept, [i for i in bbox_ids if i != 1]  # boites gardees et leurs numeros
-            return out  # renvoie un dictionnaire, comme Albumentations
-
-    aug = from_albumentations(FakeCompose())  # adapte le faux Compose au contrat de la toolbox
-    image, boxes, mask = alignment_pattern((64, 80), 3)  # image test couleur, boites, masque
-    assert torch.equal(aug(image), image.flip(-1))  # image seule : bien retournee
-    out, out_mask = aug(image, mask)  # image + masque
-    assert torch.equal(out_mask, mask.flip(-1))  # le masque est retourne pareil
-    out, out_boxes = aug(image, boxes)  # image + boites
-    kept, _ = augment.sanitize_boxes(out_boxes, torch.tensor([1, 2, 3]))  # retire les boites vides avec leur etiquette
-    assert out_boxes.shape == (3, 4) and kept.shape == (2, 4)  # la boite perdue revient vide, puis part avec son etiquette
-    # la premiere boite est retournee : x1' = 80 - x2, y1' = y1, x2' = 80 - x1, y2' = y2
-    assert torch.allclose(out_boxes[0], torch.tensor([80.0, 0, 80, 0]) - boxes[0][[2, 1, 0, 3]] * torch.tensor([1.0, -1, 1, -1]))
 
 
 # Verifie les outils d'inspection : description d'une augmentation, catalogue des operations, mesure de vitesse.

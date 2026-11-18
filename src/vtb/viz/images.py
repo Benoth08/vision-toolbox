@@ -857,7 +857,7 @@ def _render_output(output: Any, class_names: Sequence[str] | None) -> np.ndarray
     target = None  # cible associee (masque, boites), si presente
     if isinstance(output, tuple | list) and len(output) == 2:  # sortie (image, cible)
         output, target = output  # separees
-    if isinstance(output, Mapping) and "image" in output:  # style albumentations
+    if isinstance(output, Mapping) and "image" in output:  # sortie en dictionnaire {"image": ..., "mask": ..., "bboxes": ...}
         target = {k: v for k, v in output.items() if k != "image"} or None  # tout sauf l'image est la cible (None si vide)
         output = output["image"]  # l'image
     image = to_display(output)  # image affichable
@@ -866,7 +866,7 @@ def _render_output(output: Any, class_names: Sequence[str] | None) -> np.ndarray
     if isinstance(target, Mapping):  # cible en dictionnaire
         if "mask" in target and target["mask"] is not None:  # un masque
             image = overlay_mask(image, target["mask"])  # superpose le masque
-        boxes = target.get("boxes", target.get("bboxes"))  # des boites (cle "boxes", ou "bboxes" pour albumentations)
+        boxes = target.get("boxes", target.get("bboxes"))  # des boites (cle "boxes", ou "bboxes" selon la bibliotheque)
         if boxes is not None:  # si des boites sont presentes
             boxes_np = _boxes_array(boxes)  # en tableau
             # dessine les boites avec leurs classes

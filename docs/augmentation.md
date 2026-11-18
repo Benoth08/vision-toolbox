@@ -123,9 +123,9 @@ Deux règles en découlent :
 - `benchmark_ops` mesure le temps de chaque opération. Sur CPU, le chargement est souvent le goulot de l'entraînement ; l'opération `elastic` (environ 20 ms par image en 200 × 200) est la seule vraiment lente.
 - Les classes de lot et de copy-paste sont picklables. Elles fonctionnent avec `num_workers > 0` sous Windows, où les workers démarrent par « spawn ».
 
-## Et Albumentations ?
+## Et Kornia ?
 
-Albumentations est la bibliothèque d'augmentation la plus connue. Le paquet d'origine (licence MIT) est archivé depuis juillet 2025 : sa dernière version est la 2.0.8, et il ne reçoit plus de correctifs. Sa suite, AlbumentationsX, est sous double licence AGPL-3.0 ou commerciale, la même contrainte qu'Ultralytics pour un produit fermé ([dépôt archivé](https://github.com/albumentations-team/albumentations), [annonce de la double licence](https://albumentations.ai/blog/2025/01-albumentationsx-dual-licensing/)). La toolbox n'en dépend donc pas. Si l'on choisit l'une des deux en connaissance de cause, `from_albumentations(compose)` branche un `A.Compose` existant au contrat de la toolbox, boîtes et masques compris.
+Kornia est une autre bibliothèque d'augmentation (licence Apache-2.0). Elle ne travaille pas image par image dans le `Dataset`, mais sur un lot entier de tenseurs `(N, C, H, W)`, dans la boucle d'entraînement, sur la carte graphique quand il y en a une ; chaque image du lot reçoit son propre tirage. Elle devient utile quand le processeur n'arrive plus à préparer les lots assez vite. La toolbox augmente avec `torchvision.transforms.v2`, dans le `Dataset` ; le moteur RF-DETR sait utiliser Kornia sur carte graphique (clé `augmentation_backend` de la librairie). Le cours compare les deux à l'étape 6, et le projet type « Réseau custom, version complète » propose les deux au choix.
 
 ## En production
 
